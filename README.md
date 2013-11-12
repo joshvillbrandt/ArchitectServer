@@ -10,7 +10,7 @@ Architect
 
     python manage.py runserver
 
-Go to [localhost:5000] in your browser.
+Go to (localhost:5000) in your browser.
 
 ## Links
 
