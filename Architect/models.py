@@ -15,6 +15,42 @@ class ArchitectDocument(db.Document):
         'abstract': True
     }
 
+########################################################################################
+# parts
+########################################################################################
+
+class Part(ArchitectDocument):
+    root = db.StringField(max_length=255, required=True)
+    major_version = db.StringField(max_length=255, required=True)
+    description = db.StringField(max_length=255, required=True)
+    shape_json = db.StringField()
+    depreciated = db.BooleanField(default=False)
+
+    def __unicode__(self):
+        return self.root + ' ' + self.major_version
+
+########################################################################################
+# connectors
+########################################################################################
+
+########################################################################################
+# channels
+########################################################################################
+
+class ChannelType(ArchitectDocument):
+    name = db.StringField(max_length=255, required=True, unique=True) # like "RS422, Asynchronous"
+    summary = db.StringField()
+    depreciated = models.BooleanField()
+    def __unicode__(self):
+        return self.name
+
+class ChannelSignalType(ArchitectDocument):
+    channel_type = models.ForeignKey(ChannelType)
+    name = models.CharField(max_length=255) # like "TX-P"
+    order = models.IntegerField() # description is always "1"
+    def __unicode__(self):
+        return self.channel_type.__unicode__() + ' [' + self.name + ']'
+
 class ChannelInstance(ArchitectDocument):
     part = db.StringField(max_length=255, required=True) # should be a foriegn key
 
