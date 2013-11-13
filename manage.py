@@ -1,5 +1,4 @@
 from flask.ext.script import Server, Manager
-from flask import Flask, render_template
 from Architect import app
 
 # make manager
