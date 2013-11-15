@@ -1,9 +1,9 @@
-Architect
+	Architect
 =========
 
 ## Setup
 
-	sudo apt-get install mongodb python-pip
+    sudo apt-get install mongodb python-pip
     sudo pip install flask flask-script mongoengine flask_mongoengine
 
 ## Run
@@ -45,16 +45,16 @@ all documents needs
 
 ## ApiResource
 
-ApiResource(Document):
-_id
-_versions
-_deleted
-
-# synthesized
-version
-latest_version = len(_versions)
-modified_by
-modified_at
+    ApiResource(Document):
+    _id
+    _versions
+    _deleted
+    
+    # synthesized
+    version
+    latest_version = len(_versions)
+    modified_by
+    modified_at
 
 
 
@@ -62,36 +62,36 @@ modified_at
 
 ## ApiAuthServer
 
-#login_log
-date
-user
-result
-
-#api_log
-date
-app
-user
-role
-result
-
-#sessions
-token
-user
-expiration
-
-#apps
-token
-name
-
-#app_roles
-app
-name
-type=all,black,white
-
-#role_list
-app_role
-user
-
-
-
-api -> authenticate()
+    #login_log
+    date
+    user
+    result
+    
+    #api_log
+    date
+    app
+    user
+    role
+    result
+    
+    #sessions
+    token
+    user
+    expiration
+    
+    #apps
+    token
+    name
+    
+    #app_roles
+    app
+    name
+    type=all,black,white
+    
+    #role_list
+    app_role
+    user
+    
+    
+    
+    api -> authenticate()
