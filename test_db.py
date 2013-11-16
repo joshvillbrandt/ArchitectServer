@@ -1,10 +1,20 @@
-from Architect.models import *
+from ArchitectServer.models import *
+import datetime
 
-# channeli1 = ExposedChannelInstance(part="my part", child_channel="my channel type", channel_instance="channel instance")
-# channeli1.save()
+# try listing all versions
+print VersionedDocument.objects
 
-# channeli2 = NativeChannelInstance(part="my part", channel_type="my channel type", name="channel instance")
-# channeli2.save()
+doc = VersionedDocument()
 
-cis = ChannelInstance.objects.all()
-print cis
+print dir(doc)
+
+# try adding a new document
+#doc = VersionedDocument()
+
+# try getting current version
+#VersionedDocument.get(1)
+
+# try getting first version
+
+# try listing all versions again!
+#print VersionedDocument.objects

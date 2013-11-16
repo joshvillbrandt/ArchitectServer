@@ -1,57 +1,83 @@
 import datetime
 from flask import url_for
-from Architect import db
-from flask.ext.restful import fields, marshal_with, Resource
-
-class VersionedReference(db.EmbeddedDocument):
-    id = db.ReferenceField(required=True, reverse_delete_rule=DENY)
-    version = db.IntField(required=True)
+from ArchitectServer import db
+#from flask.ext.restful import fields, marshal_with, Resource
 
 class VersionedDocument(db.Document):
+    # unversioned - this is duplicated data (its also in the first version as "modified"), but this is probably the only piece of not current-version information that we want readily
     _versions = db.ListField(db.DictField())
+    created_by = db.IntField(required=True)
+    created_at = db.DateTimeField(required=True)
 
     # versioned properties
-    version = db.IntField(required=True)
+    modified_by = db.IntField(required=True)
+    modified_at = db.DateTimeField(required=True)
     deleted = db.BooleanField(required=True, default=False)
-
-    # unversioned 
-    created_by
-    created_at
 
     def clean(self):
         """Verifies that we are making a change only to the latest version and
-        automatically pushes current version back into the versions list"""
+        automatically pushes the new information into the versions list."""
 
-        # load existing document
+        # set current time
+        self.modified_at = datetime.datetime.now
 
-        # verify that we are chaing the latest version
-        if True == False:
-            msg = 'The document has been modified since you begin editing it.'
-            raise ValidationError(msg)
+        if id == None:
+            # set created_* attributes if this is the first version
+            self.created_by = self.modified_by
+            self.created_at = self.modified_at
+        else:
+            # load existing document
+            obj = self.objects.get(id=self.id)
 
-        # push back old version
+            # verify that we are chaing the latest version
+            if self.version != len(obj._versions):
+                msg = 'The document has been modified since you begin editing it.'
+                raise ValidationError(msg)
 
-class ThingOne(VersionedDocument):
-    field_a = db.StringField()
+            # set current time (so we can easily access these properties)
 
-class ThingTwo(VersionedDocument):
-    field_b = db.StringField()
-    thing_one = db.EmbddedDocumentField(VersionedReference)
+            # push back old version
+            ver = {}
+            #obj.
 
-class VersionedResouce(Resource):
+            return obj
 
-    def get(self):
-        pass
 
-    def add_resources(self, base_url, api):
-        api.add_resource(VersionedResourceList,        base_url,                                               endpoint=resource_name + '-list')
-        api.add_resource(VersionedResource,            base_url + '/<ObjectId:obj_id>',                        endpoint=resource_name + '-single');
-        api.add_resource(VersionedResourceVersionList, base_url + '/<ObjectId:obj_id>/versions',               endpoint=resource_name + '-versions');
-        api.add_resource(VersionedResourceVersion,     base_url + '/<ObjectId:obj_id>/versions/<int:version>', endpoint=resource_name + '-version');
+# class VersionedReference(db.EmbeddedDocument):
+#     id = db.ReferenceField(required=True, reverse_delete_rule=db.DENY)
+#     version = db.IntField(required=True)
 
-    #.save(cascade=True)
+# class ThingOne(VersionedDocument):
+#     field_a = db.StringField()
+
+# class ThingTwo(VersionedDocument):
+#     field_b = db.StringField()
+#     thing_one = db.EmbddedDocumentField(VersionedReference)
+
+# class VersionedResouce(Resource):
+
+    # def get(id, version = None):
+    #     obj = self.objects.get(_id = id)
+
+    #     if version == len(self._versions):
+    #         del obj._versions
+    #         return obj
+    #     else:
+    #         #TODO
+    #         return version
+
+#     def get(self):
+#         pass
+
+#     def add_resources(self, base_url, api):
+#         api.add_resource(VersionedResourceList,        base_url,                                               endpoint=resource_name + '-list')
+#         api.add_resource(VersionedResource,            base_url + '/<ObjectId:obj_id>',                        endpoint=resource_name + '-single');
+#         api.add_resource(VersionedResourceVersionList, base_url + '/<ObjectId:obj_id>/versions',               endpoint=resource_name + '-versions');
+#         api.add_resource(VersionedResourceVersion,     base_url + '/<ObjectId:obj_id>/versions/<int:version>', endpoint=resource_name + '-version');
+
+#     #.save(cascade=True)
         
-class ThingOneResource(VersionedResouce):
+# class ThingOneResource(VersionedResouce):
 
 
 # class ArchitectDocument(db.Document):

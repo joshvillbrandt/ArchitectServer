@@ -1,5 +1,5 @@
 from flask.ext.script import Server, Manager
-from Architect import app
+from ArchitectServer import app
 
 # make manager
 manager = Manager(app)
